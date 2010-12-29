@@ -9,7 +9,7 @@ from optparse import OptionParser
 
 import version
 
-def process(line):
+def process_line(line):
     line = line.strip()
     ops = {'+': 'add', '-': 'sub', '/': 'div', '*': 'mul', '%': 'mod', }
 
@@ -55,7 +55,7 @@ def process(line):
     return line
 
 def evaluate(code):
-    return '\n'.join(map(lambda line: process(line), code.split('\n')))
+    return '\n'.join(map(lambda line: process_line(line), code.split('\n')))
 
 def output_js(option, opt, output_dir, parser):
     got_all = False

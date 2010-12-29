@@ -1,35 +1,35 @@
-def process(self, op, op_name):
-    runner.process('a = b ' + op + ' c;') == 'a = ' + op_name + '(b, c);'
-    runner.process('a ' + op + '= b;') == 'a = ' + op_name + '(a, b);'
+def process_line(self, op, op_name):
+    runner.process_line('a = b ' + op + ' c;') == 'a = ' + op_name + '(b, c);'
+    runner.process_line('a ' + op + '= b;') == 'a = ' + op_name + '(a, b);'
 
-def process_unary(self, op, op_name):
-    runner.process('a' + op + op + ';') == 'a = ' + op_name + '(a, 1);'
+def process_line_unary(self, op, op_name):
+    runner.process_line('a' + op + op + ';') == 'a = ' + op_name + '(a, 1);'
 
-processes addition
-    process(self, '+', 'add')
-    process_unary(self, '+', 'add')
+process_linees addition
+    process_line(self, '+', 'add')
+    process_line_unary(self, '+', 'add')
 
-processes subtraction
-    process(self, '-', 'sub')
-    process_unary(self, '-', 'sub')
+process_linees subtraction
+    process_line(self, '-', 'sub')
+    process_line_unary(self, '-', 'sub')
 
-processes multiplication
-    process(self, '*', 'mul')
+process_linees multiplication
+    process_line(self, '*', 'mul')
 
-processes division
-    process(self, '/', 'div')
+process_linees division
+    process_line(self, '/', 'div')
 
-processes modulo
-    process(self, '%', 'mod')
+process_linees modulo
+    process_line(self, '%', 'mod')
 
-processes without match
-    runner.process('foobar') == 'foobar'
+process_linees without match
+    runner.process_line('foobar') == 'foobar'
 
-processes globals
-    runner.process('a = b + c;') == 'a = add(b, c);'
+process_linees globals
+    runner.process_line('a = b + c;') == 'a = add(b, c);'
 
-processes locals
-    runner.process('var a = b + c;') == 'var a = add(b, c);'
+process_linees locals
+    runner.process_line('var a = b + c;') == 'var a = add(b, c);'
 
 evaluates js
     given_js = '''
