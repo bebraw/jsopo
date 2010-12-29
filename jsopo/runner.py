@@ -8,7 +8,8 @@ from optparse import OptionParser
 import version
 
 class Processor:
-    pass
+    def process(self, line):
+        return 'foobar'
 
 def get_base_name(a):
     return os.path.splitext(a)[0]
