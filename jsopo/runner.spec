@@ -24,3 +24,6 @@ processes division
 
 processes modulo
     process(self, p, '%', 'mod')
+
+processes without match
+    p.process('foobar') == 'foobar'

@@ -2,6 +2,7 @@
 from __future__ import with_statement
 
 import os
+import re
 import sys
 from optparse import OptionParser
 
@@ -9,7 +10,49 @@ import version
 
 class Processor:
     def process(self, line):
-        return 'foobar'
+        line = line.strip()
+        ops = {'+': 'add', '-': 'sub', '/': 'div', '*': 'mul', '%': 'mod', }
+
+        def split_line(op):
+            return re.split('(\\' + op + ')', line)
+
+        splits = map(lambda op: split_line(op), ops.keys())
+        matches = filter(lambda a: len(a) == 3, splits)
+
+        if len(matches) == 1:
+            l_part, op, r_part = matches[0]
+            op_name = ops[op]
+
+            l_split = l_part.split('=')
+
+            if len(l_split) == 2:
+                l_value1 = l_split[0].strip()
+                l_value2 = l_split[1].strip()
+                r_value = r_part.strip(' ;')
+
+                return l_value1 + ' = ' + op_name + '(' + l_value2 + ', ' + \
+                    r_value + ');'
+            else:
+                l_value = l_part.strip()
+                r_value = r_part.strip(' =;')
+
+                return l_value + ' = ' + op_name + '(' + l_value + ', ' + \
+                    r_value + ');'
+
+            return matches[0], l_split
+        
+        unary_ops = {'++': 'add', '--': 'sub'}
+
+        matches = filter(lambda a: line.endswith(a + ';'), unary_ops.keys())
+
+        if matches:
+            op = matches[0]
+            op_name = unary_ops[op]
+            value = line.strip(' +-;')
+
+            return value + ' = ' + op_name + '(' + value + ', 1);'
+
+        return line
 
 def get_base_name(a):
     return os.path.splitext(a)[0]
