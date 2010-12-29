@@ -53,6 +53,9 @@ def process(line):
 
     return line
 
+def evaluate(code):
+    return '\n'.join(map(lambda line: process(line), code.split('\n')))
+
 def get_base_name(a):
     return os.path.splitext(a)[0]
 
