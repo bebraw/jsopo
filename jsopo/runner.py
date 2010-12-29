@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import with_statement
 
+import glob
 import os
 import re
 import sys
@@ -56,34 +57,27 @@ def process(line):
 def evaluate(code):
     return '\n'.join(map(lambda line: process(line), code.split('\n')))
 
-def get_base_name(a):
-    return os.path.splitext(a)[0]
-
 def output_js(option, opt, output_dir, parser):
-    # TODO!!!
     got_all = False
 
-    for spec_name in get_specs():
-        with open(spec_name) as f:
-            lines = f.readlines()
+    for js_name in glob.glob('*.js'):
+        with open(js_name) as f:
+            lines = f.read()
 
-        base_name = get_base_name(spec_name)
-        processor = SpecificationProcessor(base_name)
-        spec_code = processor.process(lines)
+        new_code = evaluate(lines)
 
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-        py_file_name = 'test_' + base_name + '.py'
-        py_file = os.path.join(output_dir, py_file_name)
+        new_file = os.path.join(output_dir, js_name)
 
         def write_file():
-            print('Writing ' + py_file)
+            print('Writing ' + new_file)
 
-            with open(py_file, 'w') as f:
-                f.write(spec_code)
+            with open(new_file, 'w') as f:
+                f.write(new_code)
 
-        if os.path.exists(py_file):
+        if os.path.exists(new_file):
             def do_nothing():
                 print('Doing nothing.')
 
@@ -100,7 +94,7 @@ def output_js(option, opt, output_dir, parser):
                     answer = 'Y'
                 else:
                     answer = raw_input('Are you sure you want to override file (' +
-                        py_file_name + ')?\n' + opts)
+                        js_name + ')?\n' + opts)
 
                     if answer == 'A':
                         got_all = True
