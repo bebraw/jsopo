@@ -5,30 +5,30 @@ def process_line(self, op, op_name):
 def process_line_unary(self, op, op_name):
     runner.process_line('a' + op + op + ';') == 'a = ' + op_name + '(a, 1);'
 
-process_linees addition
+processes addition
     process_line(self, '+', 'add')
     process_line_unary(self, '+', 'add')
 
-process_linees subtraction
+processes subtraction
     process_line(self, '-', 'sub')
     process_line_unary(self, '-', 'sub')
 
-process_linees multiplication
+processes multiplication
     process_line(self, '*', 'mul')
 
-process_linees division
+processes division
     process_line(self, '/', 'div')
 
-process_linees modulo
+processes modulo
     process_line(self, '%', 'mod')
 
-process_linees without match
+processes without match
     runner.process_line('foobar') == 'foobar'
 
-process_linees globals
+processes globals
     runner.process_line('a = b + c;') == 'a = add(b, c);'
 
-process_linees locals
+processes locals
     runner.process_line('var a = b + c;') == 'var a = add(b, c);'
 
 evaluates js
