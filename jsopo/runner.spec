@@ -24,3 +24,23 @@ processes modulo
 
 processes without match
     runner.process('foobar') == 'foobar'
+
+processes globals
+    runner.process('a = b + c;') == 'a = add(b, c);'
+
+processes locals
+    runner.process('var a = b + c;') == 'var a = add(b, c);'
+
+evaluates js
+    given_js = '''
+var a = new Point(2, 2);
+var b = new Point(1, 3);
+var c = a + b;
+'''
+    expected_js = '''
+var a = new Point(2, 2);
+var b = new Point(1, 3);
+var c = add(a, b);
+'''
+
+    runner.evaluate(given_js) == expected_js
