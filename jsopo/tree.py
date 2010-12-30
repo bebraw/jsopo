@@ -1,18 +1,26 @@
 def parse(line):
-    ret = {}
-    cur, prev = ret, None
-    for chr in line:
-        if chr.strip():
-            if 'op' in cur:
-                cur['r_value'] = chr
-            elif 'l_value' in cur:
-                cur['op'] = chr
-            elif 'r_value' in cur:
-                prev = cur
-                cur = {}
-                cur['l_value'] = prev['r_value']
-                prev['r_value'] = cur
-            else:
-                cur['l_value'] = chr
+    def recursion(i):
+        ret = {}
 
-    return ret
+        r_value_i = None
+        while i < len(line):
+            char = line[i].strip()
+
+            if char:
+                if 'r_value' in ret:
+                    ret['r_value'] = recursion(r_value_i)
+
+                    break
+                if 'op' in ret:
+                    ret['r_value'] = char
+                    r_value_i = i
+                elif 'l_value' in ret:
+                    ret['op'] = char
+                else:
+                    ret['l_value'] = char
+
+            i += 1
+
+        return ret
+
+    return recursion(0)
