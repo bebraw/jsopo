@@ -7,12 +7,30 @@ import re
 import sys
 from optparse import OptionParser
 
+import tree
 import version
 
 def process_line(line):
     line = line.strip()
     ops = {'+': 'add', '-': 'sub', '/': 'div', '*': 'mul', '%': 'mod', }
 
+    # check brackets
+    def line_has_brackets():
+        return '(' in line and ')' in line
+
+    def line_has_op():
+        op_names = ops.keys()
+
+        return len(filter(lambda a: a in op_names, line)) > 0
+
+    if line_has_brackets() and line_has_op():
+        parts = tree.parse(line)
+        
+        # convert tree to str now
+
+        return 'foobar'
+
+    # check regular ops
     def split_line(op):
         return re.split('(\\' + op + ')', line)
 
@@ -41,6 +59,7 @@ def process_line(line):
 
         return matches[0], l_split
 
+    # check unary ops
     unary_ops = {'++': 'add', '--': 'sub'}
 
     matches = filter(lambda a: line.endswith(a + ';'), unary_ops.keys())
@@ -52,6 +71,7 @@ def process_line(line):
 
         return value + ' = ' + op_name + '(' + value + ', 1);'
 
+    # no match, return line itself
     return line
 
 def evaluate(code):
